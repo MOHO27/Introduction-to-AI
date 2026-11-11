@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>هوش مصنوعی و کاربردهای آن</title>
+<style>
+:root{--bg:#070713;--card:rgba(255,255,255,.05);--fg:#eef0ff;--mut:#a3a5cb;--a:#8b5cf6;--b:#22d3ee;--line:rgba(255,255,255,.12);--glow:.35;--dx:-1;--bd:270deg;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root{--bg:#f3f2ff;--card:rgba(255,255,255,.78);--fg:#171633;--mut:#5d5f86;--a:#6d3fe0;--b:#0891b2;--line:rgba(60,50,140,.16);--glow:.12;color-scheme:light}}
+html[dir=ltr]{--dx:1;--bd:90deg}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Segoe UI",system-ui,sans-serif;line-height:1.7;overflow:hidden;position:relative}
+html[lang=en] body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(40vmax 40vmax at 15% 10%,var(--a),transparent 70%),radial-gradient(36vmax 36vmax at 95% 95%,var(--b),transparent 70%);opacity:var(--glow);animation:drift 14s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.35;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 80%)}
+@keyframes drift{to{transform:scale(1.15) translate(2%,2%)}}
+.deck{height:100%;position:relative;z-index:2}
+.slide{--c:var(--a);position:absolute;inset:0;display:flex;flex-direction:column;justify-content:safe center;padding:8vh 8vw 12vh;overflow-y:auto;opacity:0;visibility:hidden;transform:translateX(calc(var(--dx)*50px)) scale(.98);transition:opacity .5s,transform .5s,visibility .5s}
+.slide[data-s=B]{--c:var(--b)}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.past{transform:translateX(calc(var(--dx)*-50px)) scale(.98)}
+.g{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-size:clamp(2.1rem,6.5vw,4.4rem);margin:0 0 1rem;line-height:1.3}
+h2{font-size:clamp(1.45rem,3.6vw,2.5rem);margin:0 0 1.1rem;line-height:1.35}
+.sub{color:var(--mut);font-size:clamp(1rem,2vw,1.4rem);max-width:40ch}
+ul{list-style:none;padding:0;margin:0;display:grid;gap:.6rem;max-width:62rem}
+li{font-size:clamp(.94rem,1.7vw,1.22rem);background:var(--card);border:1px solid var(--line);border-inline-start:3px solid var(--c);border-radius:14px;padding:.65rem 1rem;backdrop-filter:blur(10px);opacity:0;transform:translateY(16px)}
+li b,.card b{color:var(--c)}
+.on li{animation:up .55s forwards;animation-delay:calc(.15s + var(--i)*.1s)}
+@keyframes up{to{opacity:1;transform:none}}
+.on .cards,.on .scroll,.on .chain,.on .math,.on .ex,.on .refs{animation:fade .7s .2s both}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}}
+ul+.cards,ul+.scroll,ul+.chain,ul+.math,.cards+.ex,.scroll+.ex,.chain+.ex,.math+.ex{margin-top:1rem}
+.chain+.cards{margin-top:1rem}
+.ex{margin-top:1rem;color:var(--mut);font-size:clamp(.9rem,1.6vw,1.1rem);max-width:62rem}.ex b{color:var(--c)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:.8rem;max-width:68rem}
+.card{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--c);border-radius:16px;padding:.9rem 1.1rem;font-size:clamp(.85rem,1.5vw,1.02rem);line-height:1.65;backdrop-filter:blur(10px)}
+.card h3{margin:0 0 .35rem;color:var(--c);font-size:1.15em}
+.card svg{display:block;width:100%;height:auto;max-height:100px;margin-bottom:.4rem}
+.chain{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;max-width:66rem}
+.chain b{color:var(--b);font-weight:400;font-size:1.2rem}
+.chain b::before{content:"←"}
+html[dir=ltr] .chain b::before{content:"→"}
+.chain span{background:var(--card);border:1px solid var(--c);border-radius:10px;padding:.35rem .75rem;font-size:clamp(.82rem,1.5vw,1.02rem)}
+.chain span.d{border-color:var(--b)}
+.scroll{overflow-x:auto;max-width:100%}
+table{border-collapse:separate;border-spacing:5px;font-size:clamp(.82rem,1.6vw,1.08rem)}
+td,th{padding:.5rem .9rem;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px}
+th{color:var(--c);font-weight:700;border-color:var(--c)}
+td:first-child{font-weight:700;color:var(--mut)}
+td.st{border-color:var(--c);color:var(--fg);font-weight:600}
+td.e{background:none;border-color:transparent}
+.math{direction:ltr;text-align:left;font-family:"Cambria Math",Cambria,Georgia,serif;font-style:italic;font-size:clamp(1rem,2.3vw,1.6rem);padding:.8rem 1.3rem;border-radius:14px;border:1px solid var(--line);background:var(--card);overflow-x:auto;max-width:36rem}
+.rh{margin:1.3rem 0 .2rem;color:var(--mut);font-size:1rem}
+.slide[data-s=R] h1{font-size:clamp(1.8rem,5vw,3.2rem);margin-bottom:.2rem}
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.5rem .8rem;max-width:68rem;margin-top:.6rem}
+.refs a,.refs div{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.45rem .8rem;font-size:clamp(.74rem,1.3vw,.92rem);line-height:1.5;color:var(--fg);text-decoration:none;overflow-wrap:anywhere;backdrop-filter:blur(8px)}
+.refs a:hover{border-color:var(--b)}
+.refs b{display:block;color:var(--b);font-weight:600;font-size:.82em}
+.refs i{display:block;font-style:normal;color:var(--mut);direction:ltr;text-align:left;font-size:.85em}
+.bar{position:fixed;inset-inline-start:0;top:0;height:4px;width:0;background:linear-gradient(var(--bd),var(--a),var(--b));box-shadow:0 0 12px var(--b);transition:width .3s;z-index:5}
+.nav{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));inset-inline-end:18px;display:flex;gap:8px;align-items:center;color:var(--mut);font-size:.9rem;z-index:5}
+.ctl{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));inset-inline-end:16px;z-index:6}
+.nav button,.ctl button{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;font:inherit;cursor:pointer;backdrop-filter:blur(8px)}
+.nav button{width:40px;height:40px;font-size:1.1rem}
+.ctl button{padding:.45rem .9rem;font-size:.85rem}
+.nav button:hover,.ctl button:hover{border-color:var(--b)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--b);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*,body::before{animation:none!important;transition:none!important}li,.cards,.scroll,.chain,.math,.ex,.refs{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="ctl"><button id="lg"></button></div>
+<main class="deck" id="deck"></main>
+<div class="nav"><button id="prev"></button><span id="count"></span><button id="next"></button></div>
+<script>
+function C(a){return '<div class="cards">'+a.map(function(c){return '<div class="card">'+(c[2]||'')+'<h3>'+c[0]+'</h3>'+c[1]+'</div>'}).join('')+'</div>'}
+function CH(a,cl){return '<div class="chain">'+a.map(function(x,k){return (k?'<b></b>':'')+'<span'+(cl&&cl[k]?' class="'+cl[k]+'"':'')+'>'+x+'</span>'}).join('')+'</div>'}
+function TB(r){return '<div class="scroll"><table><tr>'+r[0].map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr>'+r.slice(1).map(function(w){return '<tr>'+w.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>'}
+function M(x){return '<div class="math">'+x+'</div>'}
+var T={fa:{thx:'از توجه شما سپاسگزاریم',ref:'منابع استفاده‌شده',v:'ویدیو',w:'وب',b:'کتاب / مقاله',tog:'English',nx:'←',pv:'→',nxl:'بعدی',pvl:'قبلی'},en:{thx:'Thank you',ref:'References used',v:'Video',w:'Web',b:'Book / Paper',tog:'فارسی',nx:'→',pv:'←',nxl:'Next',pvl:'Previous'}};
+var FA=[
+{s:'T',t:'<span class="g">هوش مصنوعی و کاربردهای آن</span>',sub:'از تعریف و تاریخچه تا یادگیری ماشین، یادگیری عمیق، کاربردها و چالش‌ها'},
+{t:'هوش مصنوعی چیست؟',p:['<b>تعریف:</b> شاخه‌ای از علوم کامپیوتر که سامانه‌هایی می‌سازد تا کارهایی را انجام دهند که معمولاً به هوش انسان نیاز دارند، مثل یادگیری، استدلال، تصمیم‌گیری، درک زبان و تشخیص تصویر','<b>روش سنتی:</b> برنامه‌نویس همهٔ قانون‌ها را می‌نویسد. <b>روش هوش مصنوعی:</b> به کامپیوتر نمونه می‌دهیم و خودش الگو را پیدا می‌کند','<b>سه ستون پیشرفت امروز:</b> داده‌های فراوان، قدرت پردازش بالا (به‌ویژه GPU) و الگوریتم‌های یادگیری مثل شبکه‌های عصبی']},
+{t:'تاریخچهٔ هوش مصنوعی',s:'B',e:C([['۱۹۵۰: آزمون تورینگ','آلن تورینگ در مقالهٔ «ماشین‌های محاسبه‌گر و هوش» آزمونی پیشنهاد کرد: اگر قاضی انسانی در گفتگوی متنی نتواند ماشین را از انسان تشخیص دهد، می‌توان گفت ماشین «فکر می‌کند». این نخستین چارچوب جدی برای پرسش «آیا ماشین می‌تواند هوشمند باشد؟» بود.'],['۱۹۵۶: کارگاه دارتموث','در یک کارگاه تابستانی به ابتکار جان مک‌کارتی و همکارانش اصطلاح «هوش مصنوعی» پذیرفته شد و این حوزه رسماً آغاز شد. برنامه‌های اولیه قضیه‌های ریاضی را ثابت می‌کردند و بازی چکرز انجام می‌دادند.'],['دههٔ ۱۹۸۰: سامانه‌های خبره','دانش یک متخصص به‌صورت قانون‌های «اگر … آنگاه» در برنامه ذخیره می‌شد، مثلاً برای تشخیص بیماری یا پیکربندی سفارش کامپیوتر (XCON). از نظر تجاری موفق بودند، اما نگهداری قانون‌ها دشوار و سامانه‌ها شکننده بود؛ پس از آن زمستان دوم هوش مصنوعی آمد.'],['۲۰۱۲: AlexNet','یک شبکهٔ عصبی کانولوشنی عمیق که روی GPU آموزش دیده بود، در مسابقهٔ تشخیص تصویر ImageNet با اختلاف زیاد برنده شد. این نشان داد یادگیری عمیق همراه با داده و GPU کار می‌کند و رونق امروز از همین‌جا آغاز شد.'],['۲۰۱۷: ترنسفورمر','پژوهشگران گوگل در مقالهٔ «توجه تنها چیزی است که نیاز دارید» ترنسفورمر را معرفی کردند؛ معماری‌ای که با سازوکار «توجه» کل یک دنباله را هم‌زمان پردازش می‌کند. پایهٔ مدل‌های زبانی بزرگ امروزی است.'],['۲۰۲۲ به بعد: هوش مصنوعی مولد','مدل‌های بزرگ مثل ChatGPT (پایان ۲۰۲۲) و مولدهای تصویر، متن، تصویر و کد جدید تولید می‌کنند و برای نخستین بار در مقیاس وسیع در دسترس عموم قرار گرفتند.']]),raw:CH(['۱۹۵۰: آزمون تورینگ','۱۹۵۶: کارگاه دارتموث و ابداع نام AI','دههٔ ۱۹۸۰: سامانه‌های خبره','۲۰۱۲: جهش یادگیری عمیق (AlexNet)','۲۰۱۷: معماری ترنسفورمر','۲۰۲۲ به بعد: هوش مصنوعی مولد'],['','','','d','d','d']),x:'میان این دوره‌ها «زمستان‌های هوش مصنوعی» هم بوده است: زمان‌هایی که انتظارها بیش از توان واقعی فناوری بود و حمایت مالی کم شد.'},
+{t:'سطوح هوش مصنوعی',raw:C([['ضعیف یا محدود (ANI)','برای یک کار مشخص ساخته شده، مثل ترجمه یا تشخیص چهره. همهٔ سامانه‌های امروزی از این نوع‌اند.'],['عمومی (AGI)','توانایی انجام هر کار فکری که انسان انجام می‌دهد. هنوز وجود ندارد و موضوع پژوهش است.'],['فوق‌هوشمند (ASI)','هوشی فراتر از انسان در همهٔ زمینه‌ها. فعلاً فرضی است.']])},
+{t:'یادگیری ماشین',s:'B',p:['هوش مصنوعی حوزهٔ کلی است؛ <b>یادگیری ماشین (ML)</b> بخشی از آن است که الگوها را از داده یاد می‌گیرد؛ و <b>یادگیری عمیق (DL)</b> بخشی از ML است که از شبکه‌های عصبی چندلایه استفاده می‌کند','فرایند: جمع‌آوری داده ← آموزش مدل ← ارزیابی روی داده‌ای که ندیده ← استفاده در عمل'],raw:C([['نظارت‌شده','داده‌ها برچسب دارند. مثال: تشخیص هرزنامه، پیش‌بینی قیمت.'],['نظارت‌نشده','بدون برچسب؛ مدل ساختار پنهان را پیدا می‌کند. مثال: گروه‌بندی مشتریان.'],['تقویتی','عامل با پاداش و تنبیه یاد می‌گیرد. مثال: بازی‌ها و رباتیک.']])},
+{t:'یادگیری عمیق و شبکه‌های عصبی',p:['شبکهٔ عصبی از لایه‌هایی از «نورون‌های» ساده ساخته شده؛ هر نورون ورودی‌ها را وزن‌دهی و جمع می‌کند و از یک تابع فعال‌سازی می‌گذراند','آموزش یعنی تنظیم وزن‌ها با روش پس‌انتشار خطا (Backpropagation) و گرادیان کاهشی تا خطای پیش‌بینی کم شود','شبکه‌های کانولوشنی (CNN) برای تصویر و ترنسفورمرها برای متن و صدا رایج‌اند','عیب: نیاز به داده و توان پردازشی زیاد و دشواری توضیح تصمیم مدل']},
+{t:'شاخه‌های کاربردی',s:'B',raw:C([['پردازش زبان طبیعی','درک و تولید متن: ترجمه، خلاصه‌سازی، چت‌بات.'],['بینایی ماشین','تشخیص اشیا، چهره و حرکت در تصویر و ویدیو.'],['پردازش گفتار','تبدیل گفتار به متن و برعکس؛ دستیارهای صوتی.'],['هوش مصنوعی مولد','تولید متن، تصویر، صدا و کد جدید با مدل‌های بزرگ.'],['رباتیک','ترکیب ادراک و تصمیم‌گیری برای حرکت و کار در دنیای واقعی.']])},
+{t:'نمونه‌های کاربرد',raw:C([['پزشکی','تشخیص بیماری از تصاویر پزشکی (مثل رادیولوژی)، پیش‌بینی خطر و کمک به کشف دارو.'],['حمل‌ونقل','خودروهای خودران، مسیریابی هوشمند و پیش‌بینی ترافیک.'],['مالی و بانکی','تشخیص تقلب، ارزیابی اعتبار و معاملات الگوریتمی.'],['آموزش','آموزش شخصی‌سازی‌شده، تصحیح خودکار و دستیار یادگیری.'],['صنعت و کشاورزی','نگهداری پیش‌بینانه ماشین‌آلات، کنترل کیفیت و پایش محصول.'],['زندگی روزمره','ترجمهٔ خودکار، پیشنهاد فیلم و موسیقی، فیلتر هرزنامه.']])},
+{t:'چالش‌ها و ملاحظات اخلاقی',s:'B',p:['<b>سوگیری:</b> اگر داده‌های آموزشی ناعادلانه باشند، تصمیم مدل هم ناعادلانه می‌شود','<b>حریم خصوصی و امنیت:</b> مدل‌ها به داده‌های حساس نیاز دارند و می‌توانند هدف حمله باشند','<b>شفافیت:</b> توضیح اینکه چرا مدل چنین تصمیمی گرفته (هوش مصنوعی توضیح‌پذیر)','<b>اشتغال:</b> برخی شغل‌ها تغییر می‌کنند و مهارت‌های تازه لازم می‌شود','<b>مسئولیت و قانون:</b> مشخص بودن اینکه چه کسی پاسخ‌گوی خطای سامانه است']},
+{t:'جمع‌بندی',p:['هوش مصنوعی یعنی ساختن سامانه‌هایی که از داده یاد می‌گیرند و کارهای نیازمند هوش را انجام می‌دهند؛ همهٔ نمونه‌های امروزی از نوع «محدود» هستند','یادگیری ماشین و به‌ویژه یادگیری عمیق موتور اصلی پیشرفت اخیرند','کاربردها از پزشکی تا حمل‌ونقل گسترده است، اما سوگیری، حریم خصوصی و مسئولیت‌پذیری باید جدی گرفته شود','بهترین نتیجه معمولاً از همکاری انسان و ماشین به دست می‌آید']}
+];
+var EN=[
+{s:'T',t:'<span class="g">Artificial Intelligence and Its Applications</span>',sub:'From definition and history to machine learning, deep learning, uses and challenges'},
+{t:'What is artificial intelligence?',p:['<b>Definition:</b> a branch of computer science that builds systems able to do tasks that normally need human intelligence, such as learning, reasoning, decision-making, understanding language and recognizing images','<b>Traditional programming:</b> a programmer writes every rule. <b>AI approach:</b> we give the computer examples and it finds the pattern itself','<b>Three pillars of today’s progress:</b> large amounts of data, powerful computing (especially GPUs) and learning algorithms such as neural networks']},
+{t:'A short history',s:'B',e:C([['1950: Turing test','In his paper “Computing Machinery and Intelligence”, Alan Turing proposed a test: if a human judge chatting in text cannot tell a machine from a person, the machine can be said to “think”. It was the first serious framing of the question of machine intelligence.'],['1956: Dartmouth workshop','At a summer workshop led by John McCarthy and colleagues, the term “artificial intelligence” was adopted and the field formally began. Early programs proved mathematical theorems and played checkers.'],['1980s: expert systems','A specialist’s knowledge was stored as “if … then” rules, for example to diagnose disease or configure computer orders (XCON). They were commercially successful, but the rules were hard to maintain and the systems brittle; a second AI winter followed.'],['2012: AlexNet','A deep convolutional neural network trained on GPUs won the ImageNet image-recognition contest by a wide margin. It showed that deep learning with large data and GPUs works, and today’s boom started here.'],['2017: Transformer','Google researchers introduced the Transformer in the paper “Attention Is All You Need”: an architecture that uses attention to process a whole sequence in parallel. It is the basis of today’s large language models.'],['2022 onward: generative AI','Large models such as ChatGPT (late 2022) and image generators create new text, images and code, and for the first time reached the general public at large scale.']]),raw:CH(['1950: Turing test','1956: Dartmouth workshop, the name “AI”','1980s: expert systems','2012: deep learning breakthrough (AlexNet)','2017: Transformer architecture','2022 onward: generative AI'],['','','','d','d','d']),x:'There were also “AI winters” in between: periods when expectations outran what the technology could do and funding dried up.'},
+{t:'Levels of AI',raw:C([['Narrow AI (ANI)','Built for one specific task, such as translation or face recognition. Every system in use today is of this kind.'],['General AI (AGI)','Able to do any intellectual task a human can. It does not exist yet and remains a research goal.'],['Superintelligence (ASI)','Intelligence beyond humans in every area. For now it is hypothetical.']])},
+{t:'Machine learning',s:'B',p:['AI is the whole field; <b>machine learning (ML)</b> is the part that learns patterns from data; and <b>deep learning (DL)</b> is the part of ML that uses multi-layer neural networks','Workflow: collect data → train a model → evaluate it on unseen data → use it in practice'],raw:C([['Supervised','Data comes with labels. Examples: spam detection, price prediction.'],['Unsupervised','No labels; the model finds hidden structure. Example: grouping customers.'],['Reinforcement','An agent learns from rewards and penalties. Examples: games and robotics.']])},
+{t:'Deep learning and neural networks',p:['A neural network is built from layers of simple “neurons”; each one weights and sums its inputs and passes the result through an activation function','Training means adjusting the weights with backpropagation and gradient descent until prediction error is small','Convolutional networks (CNNs) are common for images, and Transformers for text and audio','Drawbacks: needs a lot of data and computing power, and its decisions are hard to explain']},
+{t:'Main fields of AI',s:'B',raw:C([['Natural language processing','Understanding and generating text: translation, summarization, chatbots.'],['Computer vision','Recognizing objects, faces and motion in images and video.'],['Speech processing','Speech-to-text and text-to-speech; voice assistants.'],['Generative AI','Creating new text, images, audio and code with large models.'],['Robotics','Combining perception and decision-making to act in the real world.']])},
+{t:'Applications',raw:C([['Healthcare','Detecting disease in medical images, predicting risk and helping discover drugs.'],['Transport','Self-driving cars, smart routing and traffic prediction.'],['Finance','Fraud detection, credit scoring and algorithmic trading.'],['Education','Personalized learning, automatic grading and study assistants.'],['Industry and farming','Predictive maintenance, quality control and crop monitoring.'],['Daily life','Machine translation, movie and music suggestions, spam filters.']])},
+{t:'Challenges and ethics',s:'B',p:['<b>Bias:</b> if the training data is unfair, the model’s decisions will be unfair too','<b>Privacy and security:</b> models need sensitive data and can be attacked','<b>Transparency:</b> explaining why a model made a decision (explainable AI)','<b>Jobs:</b> some jobs change and new skills are needed','<b>Responsibility and law:</b> being clear about who answers for a system’s mistakes']},
+{t:'Summary',p:['AI means building systems that learn from data and perform tasks that need intelligence; every system today is “narrow” AI','Machine learning, and deep learning in particular, drives recent progress','Applications range from medicine to transport, but bias, privacy and accountability must be taken seriously','The best results usually come from humans and machines working together']}
+];
+var REF=[['v','Simplilearn: Artificial Intelligence In 5 Minutes | What Is Artificial Intelligence?','https://www.youtube.com/watch?v=ad79nYk2keg'],['v','Google for Developers: 2.1 Artificial Intelligence, Machine Learning, and Deep Learning','https://www.youtube.com/watch?v=bOUfOOCFCrE'],['v','a16z: AI, Deep Learning, and Machine Learning: A Primer','https://www.youtube.com/watch?v=ht6fLrar91U'],['w','Wikipedia: Artificial intelligence','https://en.wikipedia.org/wiki/Artificial_intelligence'],['b','Russell & Norvig, Artificial Intelligence: A Modern Approach (Pearson)',''],['b','Goodfellow, Bengio & Courville, Deep Learning (MIT Press, 2016)','']];
+
+var lang='fa',i=0,n=0,el,d=document.getElementById('deck'),bar=document.getElementById('bar'),cnt=document.getElementById('count'),pv=document.getElementById('prev'),nx=document.getElementById('next'),lg=document.getElementById('lg');
+function build(){
+ var t=T[lang],S=(lang==='fa'?FA:EN).concat([{s:'R'}]),h=document.documentElement;
+ h.lang=lang;h.dir=lang==='fa'?'rtl':'ltr';n=S.length;d.innerHTML='';
+ S.forEach(function(o){var e=document.createElement('section');e.className='slide';e.dataset.s=o.s||'A';
+  e.innerHTML=o.s==='T'?'<h1>'+o.t+'</h1><div class="sub">'+o.sub+'</div>':o.s==='R'?'<h1><span class="g">'+t.thx+'</span></h1><div class="rh">'+t.ref+'</div><div class="refs">'+REF.map(function(r){var x='<b>'+t[r[0]]+'</b><span dir="ltr">'+r[1]+'</span>';return r[2]?'<a href="'+r[2]+'" target="_blank" rel="noopener">'+x+'<i>'+r[2].replace(/^https?:\/\/(www\.)?/,'')+'</i></a>':'<div>'+x+'</div>'}).join('')+'</div>':'<h2>'+o.t+'</h2>'+(o.p?'<ul>'+o.p.map(function(x,k){return '<li style="--i:'+k+'">'+x+'</li>'}).join('')+'</ul>':'')+(o.raw||'')+(o.e||'')+(o.x?'<div class="ex">'+o.x+'</div>':'');
+  d.appendChild(e)});
+ el=d.children;lg.textContent=t.tog;pv.textContent=t.pv;nx.textContent=t.nx;pv.setAttribute('aria-label',t.pvl);nx.setAttribute('aria-label',t.nxl);
+go(i)}
+function go(k){i=Math.max(0,Math.min(n-1,k));for(var j=0;j<n;j++)el[j].className='slide'+(j===i?' on':j<i?' past':'');bar.style.width=((i+1)/n*100)+'%';cnt.textContent=(i+1).toLocaleString(lang)+' / '+n.toLocaleString(lang)}
+nx.onclick=function(){go(i+1)};pv.onclick=function(){go(i-1)};
+lg.onclick=function(){lang=lang==='fa'?'en':'fa';build()};
+document.addEventListener('keydown',function(e){var fa=lang==='fa';
+ if(['ArrowDown','PageDown',' ',fa?'ArrowLeft':'ArrowRight'].indexOf(e.key)>-1){e.preventDefault();go(i+1)}
+ if(['ArrowUp','PageUp',fa?'ArrowRight':'ArrowLeft'].indexOf(e.key)>-1){e.preventDefault();go(i-1)}
+ if(e.key==='Home')go(0);if(e.key==='End')go(n-1)});
+var x0=null;
+document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50)go(i+((dx<0)===(lang!=='fa')?1:-1));x0=null});
+build();
+</script>
+</body>
+</html>
